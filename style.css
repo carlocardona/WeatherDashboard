@@ -1,0 +1,32 @@
+.container{
+    flex-direction: column;
+}
+
+.jumbotron{
+    background-color: rgb(54, 54, 54);
+    color: whitesmoke;
+    text-align: center;
+}
+
+h1{
+    align-content: center;
+}
+
+#leftSide{
+    flex-direction: column;
+    background-color: lightgrey;
+    height: auto;
+}
+
+#resultsArea{
+    background-color: lightgoldenrodyellow;
+    height: auto;
+}
+
+#rightSideTop{
+    background-color: lightpink;
+}
+
+#rightSideBottom{
+    background-color: lightsteelblue;
+}
