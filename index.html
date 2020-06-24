@@ -28,9 +28,9 @@
                     </div>
 
                     <div class="row">
-                        <input placeholder="City"></input>
+                        <input placeholder="City" id="cityInput"></input>
 
-                        <button type="button" class="btn btn-info">
+                        <button type="button" class="btn btn-info" id="searchButton">
                             <span class="glyphicon glyphicon-search"></span> Search
                         </button>
 
@@ -52,15 +52,14 @@
             <div class="col-md-8" id="rightSide">
 
                 <div class="row" id="cityName">
-                    <h4>City Name</h4>
                 </div>
 
                 <div class="row" id="basicInfo">
                     <ul>
-                        <li>Temperature</li>
-                        <li>Humidity</li>
-                        <li>Wind Speed</li>
-                        <li>UV Index</li>
+                        <li id="temperature"></li>
+                        <li id="humidity"></li>
+                        <li id="windSpeed"></li>
+                        <li id="uvIndex"></li>
                     </ul>
                 </div>
 
@@ -78,14 +77,38 @@
 
     </div>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
-    //event.preventDefault();   
-    //URL = http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={f4e3fd371dc69f23b0a6efc8a72be75d}
+        $("#searchButton").on("click", function () {
+
+            const apiKey = "63f13896fa74becbbddd56518f8a530f"
+            const cityName = $("#cityInput").val()
+            const queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
+                "&appid=" + apiKey;
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+
+                //console.log(JSON.stringify(response));
+                console.log(response);
+
+                $("#cityName").text(response.name);
+                $("#temperature").text("Temperature: " + response.main.temp);
+                $("#humidity").text("Humidity: " + response.main.humidity);
+                $("#windSpeed").text("Wind Speed: " + response.wind.speed)
 
 
+                let coordLon = response.coord.lon;
+                let coordLat = response.coord.lat;
 
+                console.log(coordLon + " : " + coordLat);
 
+            });
+        });
 
     </script>
 
