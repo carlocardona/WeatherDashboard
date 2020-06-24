@@ -1,5 +1,4 @@
 .container{
-    flex-direction: column;
 }
 
 .jumbotron{
@@ -18,15 +17,20 @@ h1{
     height: auto;
 }
 
-#resultsArea{
+.resultsArea{
     background-color: lightgoldenrodyellow;
     height: auto;
+    width: 100px;
 }
 
-#rightSideTop{
+#rightSide{
+    flex-direction: column;
+}
+#basicInfo{
     background-color: lightpink;
 }
 
-#rightSideBottom{
+#fiveDayForecast{
     background-color: lightsteelblue;
+    flex-direction: row;
 }
