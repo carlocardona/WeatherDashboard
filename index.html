@@ -65,11 +65,36 @@
 
                 <div class="row" id="fiveDayForecast">
 
-                    <div id="dayOne">Day 1</div>
-                    <div id="dayTwo">Day 2</div>
-                    <div id="dayThree">Day 3</div>
-                    <div id="dayFour">Day 4</div>
-                    <div id="dayFive">Day 5</div>
+                    <div id="dayOne">
+                        <div>Date</div>
+                        <div>Weather Icon</div>
+                        <div>Temperature</div>
+                        <div>Humidity</div>
+                    </div>
+                    <div id="dayTwo">
+                        <div>Date</div>
+                        <div>Weather Icon</div>
+                        <div>Temperature</div>
+                        <div>Humidity</div>
+                    </div>
+                    <div id="dayThree">
+                        <div>Date</div>
+                        <div>Weather Icon</div>
+                        <div>Temperature</div>
+                        <div>Humidity</div>
+                    </div>
+                    <div id="dayFour">
+                        <div>Date</div>
+                        <div>Weather Icon</div>
+                        <div>Temperature</div>
+                        <div>Humidity</div>
+                    </div>
+                    <div id="dayFive">
+                        <div>Date</div>
+                        <div>Weather Icon</div>
+                        <div>Temperature</div>
+                        <div>Humidity</div>
+                    </div>
                 </div>
 
             </div>
@@ -93,21 +118,35 @@
                 method: "GET"
             }).then(function (response) {
 
-                //console.log(JSON.stringify(response));
                 console.log(response);
 
                 $("#cityName").text(response.name);
+                //Needs Date
+                //Weather Icon
+                //temperature needs converting
                 $("#temperature").text("Temperature: " + response.main.temp);
                 $("#humidity").text("Humidity: " + response.main.humidity);
                 $("#windSpeed").text("Wind Speed: " + response.wind.speed)
 
-
-                let coordLon = response.coord.lon;
+                //UV Index
                 let coordLat = response.coord.lat;
+                let coordLon = response.coord.lon;
 
-                console.log(coordLon + " : " + coordLat);
+                const queryUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
+
+                $.ajax({
+                    url: queryUVIndex,
+                    method: "GET"
+                }).then(function (response) {
+                    //needs red background
+                    $("#uvIndex").text("UV Index: " + response.value);
+                });
 
             });
+
+            //5 Day Forecast
+
+
         });
 
     </script>
