@@ -51,7 +51,11 @@
 
             <div class="col-md-8" id="rightSide">
 
-                <div class="row" id="cityName">
+                <div class="row" id="cityDate">
+                    <div id="cityName"></div>
+                    <div id="currentDate"></div>
+                    <div id="currentIcon"></div>
+
                 </div>
 
                 <div class="row" id="basicInfo">
@@ -121,8 +125,8 @@
                 console.log(response);
 
                 $("#cityName").text(response.name);
-                //Needs Date
-                //Weather Icon
+                $("#currentDate").text(response.dt);
+                $("#currentIcon").text("icon:" + response.icon);
                 //temperature needs converting
                 $("#temperature").text("Temperature: " + response.main.temp);
                 $("#humidity").text("Humidity: " + response.main.humidity);
@@ -142,9 +146,19 @@
                     $("#uvIndex").text("UV Index: " + response.value);
                 });
 
+                //5 Day Forecast
+                let queryFiveForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + apiKey;
+
+                $.ajax({
+                    url: queryFiveForecast,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log("Forecast:" + response.forecast);
+                })
+
             });
 
-            //5 Day Forecast
+
 
 
         });
