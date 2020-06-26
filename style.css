@@ -32,7 +32,6 @@ li{
 }
 
 #basicInfo{
-    background-color: lightpink;
 }
 
 #cityDate{
@@ -44,7 +43,6 @@ li{
 }
 
 #fiveDayForecast{
-    background-color: lightsteelblue;
     flex-direction: row;
     justify-content: space-evenly;
 }
