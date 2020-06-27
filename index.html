@@ -37,12 +37,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="resultList">
-                            <ul>
-                                <li id="cityList"></li>
-                            </ul>
-                        </div>
-
+                        <div class="resultList"></div>
                     </div>
 
                 </div>
@@ -108,11 +103,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
-        $("#searchButton").on("click", function () {
+        let cityArray = [];
 
-            const apiKey = "63f13896fa74becbbddd56518f8a530f"
-            const cityName = $("#cityInput").val()
-            const queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
+        $("#searchButton").on("click", function (event) {
+            console.log("Searching...");
+            event.preventDefault();
+
+            let cityInput = $("#cityInput").val();
+            cityArray.push(cityInput);
+            console.log("Cityarray: " + cityArray);
+            displayWeather();
+            makeButtons();
+        });
+
+        function makeButtons() {
+            console.log("making button...");
+            $(".resultList").empty();
+
+            for (let i = 0; i < cityArray.length; i++) {
+                const btnTag = $("<button>");
+                btnTag.addClass("cityButton");
+                btnTag.attr("cityName", cityArray[i]);
+                btnTag.text(cityArray[i]);
+                $(".resultList").append(btnTag);
+            }
+        }
+
+        function displayWeather() {
+            console.log("displaying weather...");
+            let cityName = $(this).attr("cityName");
+            const apiKey = "63f13896fa74becbbddd56518f8a530f";
+            console.log("CityName: " + cityName);
+            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
                 "&appid=" + apiKey;
 
             $.ajax({
@@ -153,18 +175,15 @@
                 }).then(function (response) {
                     console.log("Forecast:" + JSON.stringify(response.list.dt));
 
-
                 })
 
             });
 
+        };
+        //not passing the city value
+        $(document).on("click", ".cityButton", displayWeather);
 
-            $("#cityList").html(cityName + "<br>");
-            //save clicked querys
-            //append to a list to the left side
-            //when its clicked should call back the search function
-
-        });
+        makeButtons();
 
     </script>
 
