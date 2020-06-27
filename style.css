@@ -17,6 +17,10 @@ h1{
     height: auto;
 }
 
+#uvIndex{
+    background-color: red;
+}
+
 .resultsArea{
     background-color: lightgoldenrodyellow;
     height: auto;
@@ -25,6 +29,10 @@ h1{
 
 #rightSide{
     flex-direction: column;
+}
+
+.basicCity{
+    align-content: space-between;
 }
 
 li{
