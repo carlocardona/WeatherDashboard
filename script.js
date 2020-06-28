@@ -55,7 +55,7 @@ function searchWeather(cityName) {
         let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " C");
         basicInfoDiv.append(temp);
 
-        let humidity = $("<p>").text("Humidity: " + response.main.humidity);
+        let humidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
         basicInfoDiv.append(humidity);
 
         let windSpeed = $("<p>").text("Wind Speed: " + response.wind.speed);
@@ -86,34 +86,32 @@ function searchWeather(cityName) {
             method: "GET"
         }).then(function (response) {
 
-            let x = 0;
-            console.log(response.list[x]);
+            for (let x = 0; x < 5; x++) {
 
-            let dayForeCast = $("<div class='col'>");
+                let foreCastDiv = ["#dayOne", "#dayTwo", "#dayThree", "#dayFour", "#dayFive"];
 
-            let foreCastDate = $("<p>").text("Date: " + response.list[x].dt_txt);
-            dayForeCast.append(foreCastDate);
+                console.log(response.list[x]);
 
-            let foreCastIcon = response.list[x].clouds;
-            let iconImg = $("<img>").attr("src", foreCastIcon);
-            dayForeCast.append(iconImg);
+                let dayForeCast = $("<div class='col'>");
 
-            let foreCastTemp = $("<p>").text("Temp: " + response.list[x].main.temp);
-            dayForeCast.append(foreCastTemp);
+                let foreCastDate = $("<p>").text("Date: " + response.list[x].dt_txt);
+                dayForeCast.append(foreCastDate);
 
-            let foreCastHumid = $("<p>").text("Humidity: " + response.list[x].main.humidity);
-            dayForeCast.append(foreCastHumid);
+                let foreCastIcon = response.list[x].clouds;
+                let iconImg = $("<img>").attr("src", foreCastIcon);
+                dayForeCast.append(iconImg);
 
-            $("#dayOne").append(dayForeCast);
+                const kelToCel = response.list[x].main.temp - 273.15;
+                let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
 
-            //then append to fivedayforcast
-            //date
-            //weather icon
-            //temperature
-            //humidity
+                dayForeCast.append(foreCastTemp);
 
+                let foreCastHumid = $("<p>").text("Humidity: " + response.list[x].main.humidity + "%");
+                dayForeCast.append(foreCastHumid);
 
+                $(foreCastDiv[x]).append(dayForeCast);
 
+            }
 
         })
 
