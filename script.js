@@ -3,6 +3,7 @@ let cityInput = '';
 const apiKey = "63f13896fa74becbbddd56518f8a530f";
 
 $("#searchButton").on("click", function (event) {
+
     event.preventDefault();
 
     let cityInput = $("#cityInput").val();
@@ -14,9 +15,9 @@ $("#searchButton").on("click", function (event) {
 });
 
 function searchWeather(cityName) {
+
     $("#cityDate").empty();
     $("#basicInfo").empty();
-    $("#dayOne", "#dayTwo", "#dayThree", "#dayFour", "#dayFive").empty();
 
     console.log("CityName: " + cityName);
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
@@ -84,8 +85,16 @@ function searchWeather(cityName) {
 
     });
 
+
+    //5 Day forecast
+
     function forecast(coordLat, coordLon) {
-        //5 Day forecast
+
+        $("#dayOne").empty();
+        $("#dayTwo").empty();
+        $("#dayThree").empty();
+        $("#dayFour").empty();
+        $("#dayFive").empty();
 
         const queryForecast = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
 
@@ -143,8 +152,13 @@ function makeButtons() {
     }
 }
 
+function clickedButton() {
+    let clickedCity = $(this).attr("cityName");
+    searchWeather(clickedCity);
+}
+
 //Previous Buttons to re-show information
-$(document).on("click", ".cityButton", searchWeather);
+$(document).on("click", ".cityButton", clickedButton);
 makeButtons();
 
 
