@@ -1,5 +1,6 @@
 let cityArray = [];
 let cityInput = '';
+const apiKey = "63f13896fa74becbbddd56518f8a530f";
 
 $("#searchButton").on("click", function (event) {
     event.preventDefault();
@@ -16,7 +17,6 @@ function searchWeather(cityName) {
     $("#cityDate").empty();
     $("#basicInfo").empty();
 
-    const apiKey = "63f13896fa74becbbddd56518f8a530f";
     console.log("CityName: " + cityName);
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
         "&appid=" + apiKey;
@@ -65,59 +65,84 @@ function searchWeather(cityName) {
         let coordLat = response.coord.lat;
         let coordLon = response.coord.lon;
 
-        const queryUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
+        //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
+
+        const queryUVIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
 
         $.ajax({
             url: queryUVIndex,
             method: "GET"
         }).then(function (response) {
 
-            let uvIndex = $("<p id='uvIndex'>").text("UV Index: " + response.value);
+            let uvIndex = $("<p id='uvIndex'>").text("UV Index: " + response.current.uvi);
             basicInfoDiv.append(uvIndex);
         });
 
         $("#basicInfo").append(basicInfoDiv);
 
-        //5 Day Forecast
-        let queryFiveForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + apiKey;
-
-        $.ajax({
-            url: queryFiveForecast,
-            method: "GET"
-        }).then(function (response) {
-
-            for (let x = 0; x < 5; x++) {
-
-                let foreCastDiv = ["#dayOne", "#dayTwo", "#dayThree", "#dayFour", "#dayFive"];
-
-                console.log(response.list[x]);
-
-                let dayForeCast = $("<div class='col'>");
-
-                let foreCastDate = $("<p>").text("Date: " + response.list[x].dt_txt);
-                dayForeCast.append(foreCastDate);
-
-                let foreCastIcon = response.list[x].clouds;
-                let iconImg = $("<img>").attr("src", foreCastIcon);
-                dayForeCast.append(iconImg);
-
-                const kelToCel = response.list[x].main.temp - 273.15;
-                let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
-
-                dayForeCast.append(foreCastTemp);
-
-                let foreCastHumid = $("<p>").text("Humidity: " + response.list[x].main.humidity + "%");
-                dayForeCast.append(foreCastHumid);
-
-                $(foreCastDiv[x]).append(dayForeCast);
-
-            }
-
-        })
-
     });
 
 };
+
+
+
+
+// //5 Day Forecast v2
+
+// const queryFiveDayForeCast = "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&cnt=5&appid=" + apiKey;
+
+// $.ajax({
+//     url: queryFiveDayForeCast,
+//     method: "GET"
+// }).then(function (response) {
+//     console.log(response);
+// })
+
+
+// //5 Day Forecast v1 - Working
+// let queryFiveForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + apiKey;
+
+// $.ajax({
+//     url: queryFiveForecast,
+//     method: "GET"
+// }).then(function (response) {
+
+//     $("#dayOne, #dayTwo, #dayThree, #dayFour, #dayFive").empty();
+
+//     console.log(response);
+
+//     for (let x = 0; x < 5; x++) {
+
+//         let foreCastDiv = ["#dayOne", "#dayTwo", "#dayThree", "#dayFour", "#dayFive"];
+
+//         console.log(response.list[x]);
+
+//         let dayForeCast = $("<div class='col'>");
+
+//         let foreCastDate = $("<p>").text("Date: " + response.list[x].dt_txt);
+//         dayForeCast.append(foreCastDate);
+
+//         let foreCastIcon = response.list[x].clouds;
+//         let iconImg = $("<img>").attr("src", foreCastIcon);
+//         dayForeCast.append(iconImg);
+
+//         const kelToCel = response.list[x].main.temp - 273.15;
+//         let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
+
+//         dayForeCast.append(foreCastTemp);
+
+//         let foreCastHumid = $("<p>").text("Humidity: " + response.list[x].main.humidity + "%");
+//         dayForeCast.append(foreCastHumid);
+
+//         $(foreCastDiv[x]).append(dayForeCast);
+
+//     };
+
+// })
+
+
+
+
 
 //Make Button
 
