@@ -1,62 +1,61 @@
-.container{
+.container {
 }
 
-.jumbotron{
-    background-color: rgb(54, 54, 54);
-    color: whitesmoke;
-    text-align: center;
+.jumbotron {
+  background-color: rgb(54, 54, 54);
+  color: whitesmoke;
+  text-align: center;
 }
 
-h1{
-    align-content: center;
+h1 {
+  align-content: center;
 }
 
-#leftSide{
-    flex-direction: column;
-    background-color: lightgrey;
-    height: auto;
+#leftSide {
+  flex-direction: column;
+  background-color: lightgrey;
+  height: auto;
 }
 
-#uvIndex{
-    background-color: red;
+#uvIndex {
+  background-color: red;
 }
 
-.resultsArea{
-    background-color: lightgoldenrodyellow;
-    height: auto;
-    width: 100px;
+.resultsArea {
+  background-color: lightgoldenrodyellow;
+  height: auto;
+  width: 100px;
 }
 
-#rightSide{
-    flex-direction: column;
+#rightSide {
+  flex-direction: column;
 }
 
-.basicCity{
-    align-content: space-between;
+.basicCity {
+  align-content: space-between;
 }
 
-li{
-    list-style-type:none;
+li {
+  list-style-type: none;
 }
 
-#basicInfo{
+#basicInfo {
 }
 
-#cityDate{
-    justify-content: left;
+#cityDate {
+  justify-content: left;
 }
 
-#cityName{
-    font-size: xx-large;
+#cityName {
+  font-size: xx-large;
 }
 
-.card{
-    color: whitesmoke;
-    background-color: blue;
+.card {
+  color: whitesmoke;
+  background-color: blue;
 }
 
-#fiveDayForecast{
-    flex-direction: row;
-    justify-content: space-evenly;
+#fiveDayForecast {
+  flex-direction: row;
+  justify-content: space-evenly;
 }
-

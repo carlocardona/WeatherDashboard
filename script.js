@@ -1,164 +1,172 @@
 let cityArray = [];
-let cityInput = '';
+let cityInput = "";
 const apiKey = "63f13896fa74becbbddd56518f8a530f";
 
 $("#searchButton").on("click", function (event) {
+  event.preventDefault();
 
-    event.preventDefault();
-
-    let cityInput = $("#cityInput").val();
-    cityArray.push(cityInput);
-    console.log("cityinput: " + cityInput);
-    searchWeather(cityInput);
-    makeButtons();
-
+  let cityInput = $("#cityInput").val();
+  cityArray.push(cityInput);
+  console.log("cityinput: " + cityInput);
+  searchWeather(cityInput);
+  makeButtons();
 });
 
 function searchWeather(cityName) {
+  $("#cityDate").empty();
+  $("#basicInfo").empty();
 
-    $("#cityDate").empty();
-    $("#basicInfo").empty();
+  console.log("CityName: " + cityName);
+  let queryURL =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    cityName +
+    "&appid=" +
+    apiKey;
 
-    console.log("CityName: " + cityName);
-    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
-        "&appid=" + apiKey;
+  $.ajax({ url: queryURL, method: "GET" }).then(function (response) {
+    console.log(response);
+    // cityDate
+    let cityDateDiv = $("<div class='col basicCity'>");
 
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
+    let cityName = response.name;
+    let pName = $("<p>").text(cityName);
+    cityDateDiv.append(pName);
 
-        console.log(response);
-        //cityDate
-        let cityDateDiv = $("<div class='col basicCity'>");
+    let currentDate = response.dt;
+    let d = new Date(currentDate);
+    console.log("Date: " + d);
+    let pDate = $("<p>").text(currentDate);
+    cityDateDiv.append(pDate);
 
-        let cityName = response.name;
-        let pName = $("<p>").text(cityName);
-        cityDateDiv.append(pName);
+    // http://openweathermap.org/img/wn/{}@2x.png
+    // let iconURL = http://openweathermap.org/img/wn/{}@2x.png
+    let currentIconCode = response.weather[0].icon;
+    let currentIcon =
+      "http://openweathermap.org/img/wn/" + currentIconCode + "@2x.png";
+    let iconImg = $("<img>").attr("src", currentIcon);
+    cityDateDiv.append(iconImg);
 
-        let currentDate = response.dt;
-        let d = new Date(currentDate);
-        console.log("Date: " + d);
-        let pDate = $("<p>").text(currentDate);
-        cityDateDiv.append(pDate);
+    console.log("citydateDiv: " + cityDateDiv);
+    $("#cityDate").append(cityDateDiv);
 
-        let currentIcon = response.weather.icon;
-        let iconImg = $("<img>").attr("src", currentIcon);
-        cityDateDiv.append(iconImg);
+    // basicInfo
 
-        console.log("citydateDiv: " + cityDateDiv);
-        $("#cityDate").append(cityDateDiv);
+    let basicInfoDiv = $("<div class='col infoBasic'>");
 
-        //basicInfo
+    const kelToCel = response.main.temp - 273.15;
+    let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " C");
+    basicInfoDiv.append(temp);
 
-        let basicInfoDiv = $("<div class='col infoBasic'>");
+    let humidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
+    basicInfoDiv.append(humidity);
 
-        const kelToCel = response.main.temp - 273.15;
-        let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " C");
-        basicInfoDiv.append(temp);
+    let windSpeed = $("<p>").text("Wind Speed: " + response.wind.speed);
+    basicInfoDiv.append(windSpeed);
 
-        let humidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
-        basicInfoDiv.append(humidity);
+    // UV Index
+    let coordLat = response.coord.lat;
+    let coordLon = response.coord.lon;
 
-        let windSpeed = $("<p>").text("Wind Speed: " + response.wind.speed);
-        basicInfoDiv.append(windSpeed);
+    const queryUVIndex =
+      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+      coordLat +
+      "&lon=" +
+      coordLon +
+      "&appid=" +
+      apiKey;
 
-        //UV Index
-        let coordLat = response.coord.lat;
-        let coordLon = response.coord.lon;
+    $.ajax({ url: queryUVIndex, method: "GET" }).then(function (response) {
+      let uvIndex = $("<p id='uvIndex'>").text(
+        "UV Index: " + response.current.uvi
+      );
+      basicInfoDiv.append(uvIndex);
 
-        const queryUVIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
-
-        $.ajax({
-            url: queryUVIndex,
-            method: "GET"
-        }).then(function (response) {
-
-            let uvIndex = $("<p id='uvIndex'>").text("UV Index: " + response.current.uvi);
-            basicInfoDiv.append(uvIndex);
-
-            $("#basicInfo").append(basicInfoDiv);
-
-        });
-
-        forecast(coordLat, coordLon);
-
+      $("#basicInfo").append(basicInfoDiv);
     });
 
+    forecast(coordLat, coordLon);
+  });
 
-    //5 Day forecast
+  // 5 Day forecast
 
-    function forecast(coordLat, coordLon) {
+  function forecast(coordLat, coordLon) {
+    $("#dayOne").empty();
+    $("#dayTwo").empty();
+    $("#dayThree").empty();
+    $("#dayFour").empty();
+    $("#dayFive").empty();
 
-        $("#dayOne").empty();
-        $("#dayTwo").empty();
-        $("#dayThree").empty();
-        $("#dayFour").empty();
-        $("#dayFive").empty();
+    const queryForecast =
+      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+      coordLat +
+      "&lon=" +
+      coordLon +
+      "&appid=" +
+      apiKey;
 
-        const queryForecast = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coordLat + "&lon=" + coordLon + "&appid=" + apiKey;
+    $.ajax({ url: queryForecast, method: "GET" }).then(function (response) {
+      for (let x = 0; x < 5; x++) {
+        let foreCastDiv = [
+          "#dayOne",
+          "#dayTwo",
+          "#dayThree",
+          "#dayFour",
+          "#dayFive",
+        ];
 
-        $.ajax({
-            url: queryForecast,
-            method: "GET"
-        }).then(function (response) {
+        console.log(response.daily[x]);
 
-            for (let x = 0; x < 5; x++) {
+        let dayForeCast = $("<div class='col'>");
 
-                let foreCastDiv = ["#dayOne", "#dayTwo", "#dayThree", "#dayFour", "#dayFive"];
+        // date needs converting
+        let foreCastDate = $("<p>").text("Date: " + response.daily[x].dt);
+        dayForeCast.append(foreCastDate);
 
-                console.log(response.daily[x]);
+        let foreCastIcon = response.daily[x].weather[0].icon;
+        let iconURL =
+          "http://openweathermap.org/img/wn/" + foreCastIcon + "@2x.png";
 
-                let dayForeCast = $("<div class='col'>");
+        console.log(iconURL);
 
-                //date needs converting
-                let foreCastDate = $("<p>").text("Date: " + response.daily[x].dt);
-                dayForeCast.append(foreCastDate);
+        let iconImg = $("<img>").attr("src", iconURL);
+        dayForeCast.append(iconImg);
 
-                let foreCastIcon = response.daily[x].clouds;
-                let iconImg = $("<img>").attr("src", foreCastIcon);
-                dayForeCast.append(iconImg);
+        const kelToCel = response.daily[x].temp.day - 273.15;
+        let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
 
-                const kelToCel = response.daily[x].temp.day - 273.15;
-                let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
+        dayForeCast.append(foreCastTemp);
 
-                dayForeCast.append(foreCastTemp);
+        let foreCastHumid = $("<p>").text(
+          "Humidity: " + response.daily[x].humidity + "%"
+        );
+        dayForeCast.append(foreCastHumid);
 
-                let foreCastHumid = $("<p>").text("Humidity: " + response.daily[x].humidity + "%");
-                dayForeCast.append(foreCastHumid);
+        $(foreCastDiv[x]).append(dayForeCast);
+      }
+    });
+  }
+}
 
-                $(foreCastDiv[x]).append(dayForeCast);
-
-            };
-
-        });
-
-    }
-
-};
-
-//Make Button
+// Make Button
 
 function makeButtons() {
-    console.log("making button...");
-    $(".resultList").empty();
+  console.log("making button...");
+  $(".resultList").empty();
 
-    for (let i = 0; i < cityArray.length; i++) {
-        const btnTag = $("<button>");
-        btnTag.addClass("cityButton");
-        btnTag.attr("cityName", cityArray[i]);
-        btnTag.text(cityArray[i]);
-        $(".resultList").append(btnTag);
-    }
+  for (let i = 0; i < cityArray.length; i++) {
+    const btnTag = $("<button>");
+    btnTag.addClass("cityButton");
+    btnTag.attr("cityName", cityArray[i]);
+    btnTag.text(cityArray[i]);
+    $(".resultList").append(btnTag);
+  }
 }
 
 function clickedButton() {
-    let clickedCity = $(this).attr("cityName");
-    searchWeather(clickedCity);
+  let clickedCity = $(this).attr("cityName");
+  searchWeather(clickedCity);
 }
 
-//Previous Buttons to re-show information
+// Previous Buttons to re-show information
 $(document).on("click", ".cityButton", clickedButton);
 makeButtons();
-
-
