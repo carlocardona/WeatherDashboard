@@ -10,12 +10,12 @@ $("#searchButton").on("click", function (event) {
     searchWeather(cityInput);
     makeButtons();
 
-
 });
 
 function searchWeather(cityName) {
-    // console.log("displaying weather, cityInput: " + cityInput);
-    // cityName = $(this).attr("cityName");
+    $("#cityDate").empty();
+    $("#basicInfo").empty();
+
     const apiKey = "63f13896fa74becbbddd56518f8a530f";
     console.log("CityName: " + cityName);
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName +
@@ -26,6 +26,7 @@ function searchWeather(cityName) {
         method: "GET"
     }).then(function (response) {
 
+        console.log(response);
         //cityDate
         let cityDateDiv = $("<div class='col basicCity'>");
 
@@ -34,6 +35,8 @@ function searchWeather(cityName) {
         cityDateDiv.append(pName);
 
         let currentDate = response.dt;
+        let d = new Date(currentDate);
+        console.log("Date: " + d);
         let pDate = $("<p>").text(currentDate);
         cityDateDiv.append(pDate);
 
@@ -42,14 +45,14 @@ function searchWeather(cityName) {
         cityDateDiv.append(iconImg);
 
         console.log("citydateDiv: " + cityDateDiv);
-        $("#cityDate").prepend(cityDateDiv);
+        $("#cityDate").append(cityDateDiv);
 
         //basicInfo
 
         let basicInfoDiv = $("<div class='col infoBasic'>");
 
         const kelToCel = response.main.temp - 273.15;
-        let temp = $("<p>").text(kelToCel.toFixed(2) + " C");
+        let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " C");
         basicInfoDiv.append(temp);
 
         let humidity = $("<p>").text("Humidity: " + response.main.humidity);
@@ -73,7 +76,7 @@ function searchWeather(cityName) {
             basicInfoDiv.append(uvIndex);
         });
 
-        $("#basicInfo").prepend(basicInfoDiv);
+        $("#basicInfo").append(basicInfoDiv);
 
         //5 Day Forecast
         let queryFiveForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + apiKey;
@@ -82,7 +85,35 @@ function searchWeather(cityName) {
             url: queryFiveForecast,
             method: "GET"
         }).then(function (response) {
-            console.log("Forecast:" + JSON.stringify(response.list.dt));
+
+            let x = 0;
+            console.log(response.list[x]);
+
+            let dayForeCast = $("<div class='col'>");
+
+            let foreCastDate = $("<p>").text("Date: " + response.list[x].dt_txt);
+            dayForeCast.append(foreCastDate);
+
+            let foreCastIcon = response.list[x].clouds;
+            let iconImg = $("<img>").attr("src", foreCastIcon);
+            dayForeCast.append(iconImg);
+
+            let foreCastTemp = $("<p>").text("Temp: " + response.list[x].main.temp);
+            dayForeCast.append(foreCastTemp);
+
+            let foreCastHumid = $("<p>").text("Humidity: " + response.list[x].main.humidity);
+            dayForeCast.append(foreCastHumid);
+
+            $("#dayOne").append(dayForeCast);
+
+            //then append to fivedayforcast
+            //date
+            //weather icon
+            //temperature
+            //humidity
+
+
+
 
         })
 
@@ -105,6 +136,7 @@ function makeButtons() {
     }
 }
 
+//Previous Buttons to re-show information
 $(document).on("click", ".cityButton", searchWeather);
 makeButtons();
 

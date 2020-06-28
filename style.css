@@ -50,6 +50,11 @@ li{
     font-size: xx-large;
 }
 
+.card{
+    color: whitesmoke;
+    background-color: blue;
+}
+
 #fiveDayForecast{
     flex-direction: row;
     justify-content: space-evenly;
