@@ -2,12 +2,24 @@ let cityArray = [];
 let cityInput = "";
 const apiKey = "63f13896fa74becbbddd56518f8a530f";
 
+$(document).ready(function () {
+  cityArray = localStorage.getItem("cityArray").split(",");
+
+  if (!cityArray) {
+    cityArray = [];
+  }
+
+  makeButtons();
+});
+
 $("#searchButton").on("click", function (event) {
   event.preventDefault();
 
   let cityInput = $("#cityInput").val();
   cityArray.push(cityInput);
-  console.log("cityinput: " + cityInput);
+
+  localStorage.setItem("cityArray", cityArray);
+
   searchWeather(cityInput);
   makeButtons();
 });
@@ -38,8 +50,6 @@ function searchWeather(cityName) {
     let pDate = $("<p>").text(currentDate);
     cityDateDiv.append(pDate);
 
-    // http://openweathermap.org/img/wn/{}@2x.png
-    // let iconURL = http://openweathermap.org/img/wn/{}@2x.png
     let currentIconCode = response.weather[0].icon;
     let currentIcon =
       "http://openweathermap.org/img/wn/" + currentIconCode + "@2x.png";
@@ -162,11 +172,14 @@ function makeButtons() {
   }
 }
 
-function clickedButton() {
-  let clickedCity = $(this).attr("cityName");
-  searchWeather(clickedCity);
-}
+// function clickedButton() {
+//   let clickedCity = $(this).attr("cityName");
+//   searchWeather(clickedCity);
+// }
 
 // Previous Buttons to re-show information
-$(document).on("click", ".cityButton", clickedButton);
+$(document).on("click", ".cityButton", (e) =>
+  searchWeather($(e.target).attr("cityName"))
+);
+
 makeButtons();
