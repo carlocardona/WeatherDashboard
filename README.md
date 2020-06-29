@@ -16,4 +16,4 @@ Buttons for the previous searches are then created on the left hand side of the 
 
 When buttons are pressed it will present the weather information.
 
-https://github.com/carlocardona/WeatherDashboard/blob/master/Assets/WeatherDashboardA6.PNG
+<img src="https://github.com/carlocardona/WeatherDashboard/blob/master/Assets/WeatherDashboardA6.PNG">
