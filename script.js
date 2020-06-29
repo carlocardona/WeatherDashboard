@@ -44,20 +44,26 @@ function searchWeather(cityName) {
     let pName = $("<p>").text(cityName);
     cityDateDiv.append(pName);
 
-    let currentDate = response.dt;
-    var d = new Date(currentDate);
-    var n = d.toUTCString();
-    console.log("Date: " + n);
-
     /////
 
-    // let currentDate = response.dt;
-    // let d = new Date(0);
-    // console.log("Date: " + d);
-    // let pDate = $("<p>").text(currentDate);
-    // cityDateDiv.append(pDate);
+    const todayDate = new Date(1000 * response.dt);
 
-    /////
+    const date = new Date(todayDate);
+    const dateTimeFormat = new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
+    const [
+      { value: month },
+      ,
+      { value: day },
+      ,
+      { value: year },
+    ] = dateTimeFormat.formatToParts(date);
+
+    let pDate = $("<p>").text(`${day}-${month}-${year}`);
+    cityDateDiv.append(pDate);
 
     let currentIconCode = response.weather[0].icon;
     let currentIcon =
@@ -73,7 +79,7 @@ function searchWeather(cityName) {
     let basicInfoDiv = $("<div class='col infoBasic'>");
 
     const kelToCel = response.main.temp - 273.15;
-    let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " C");
+    let temp = $("<p>").text("Temperature: " + kelToCel.toFixed(2) + " °C");
     basicInfoDiv.append(temp);
 
     let humidity = $("<p>").text("Humidity: " + response.main.humidity + "%");
@@ -124,7 +130,7 @@ function searchWeather(cityName) {
       apiKey;
 
     $.ajax({ url: queryForecast, method: "GET" }).then(function (response) {
-      for (let x = 0; x < 5; x++) {
+      for (let x = 0; x < 6; x++) {
         let foreCastDiv = [
           "#dayOne",
           "#dayTwo",
@@ -133,15 +139,28 @@ function searchWeather(cityName) {
           "#dayFive",
         ];
 
-        console.log(response.daily[x]);
-
         let dayForeCast = $("<div class='col'>");
 
         /////
 
-        /// date needs converting
-        // let foreCastDate = $("<p>").text("Date: " + response.daily[x].dt);
-        // dayForeCast.append(foreCastDate);
+        const foreDate = new Date(1000 * response.daily[x].dt);
+
+        const date = new Date(foreDate);
+        const dateTimeFormat = new Intl.DateTimeFormat("en", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        });
+        const [
+          { value: month },
+          ,
+          { value: day },
+          ,
+          { value: year },
+        ] = dateTimeFormat.formatToParts(date);
+
+        let foreCastDate = $("<p>").text(`${day}-${month}-${year}`);
+        dayForeCast.append(foreCastDate);
 
         /////
 
@@ -155,7 +174,9 @@ function searchWeather(cityName) {
         dayForeCast.append(iconImg);
 
         const kelToCel = response.daily[x].temp.day - 273.15;
-        let foreCastTemp = $("<p>").text("Temp: " + kelToCel.toFixed(2) + " C");
+        let foreCastTemp = $("<p>").text(
+          "Temp: " + kelToCel.toFixed(2) + " °C"
+        );
 
         dayForeCast.append(foreCastTemp);
 
