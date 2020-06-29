@@ -45,10 +45,19 @@ function searchWeather(cityName) {
     cityDateDiv.append(pName);
 
     let currentDate = response.dt;
-    let d = new Date(currentDate);
-    console.log("Date: " + d);
-    let pDate = $("<p>").text(currentDate);
-    cityDateDiv.append(pDate);
+    var d = new Date(currentDate);
+    var n = d.toUTCString();
+    console.log("Date: " + n);
+
+    /////
+
+    // let currentDate = response.dt;
+    // let d = new Date(0);
+    // console.log("Date: " + d);
+    // let pDate = $("<p>").text(currentDate);
+    // cityDateDiv.append(pDate);
+
+    /////
 
     let currentIconCode = response.weather[0].icon;
     let currentIcon =
@@ -128,9 +137,13 @@ function searchWeather(cityName) {
 
         let dayForeCast = $("<div class='col'>");
 
-        // date needs converting
-        let foreCastDate = $("<p>").text("Date: " + response.daily[x].dt);
-        dayForeCast.append(foreCastDate);
+        /////
+
+        /// date needs converting
+        // let foreCastDate = $("<p>").text("Date: " + response.daily[x].dt);
+        // dayForeCast.append(foreCastDate);
+
+        /////
 
         let foreCastIcon = response.daily[x].weather[0].icon;
         let iconURL =
